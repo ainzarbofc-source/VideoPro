@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VideoMaker & Editor</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  color: #fff;
+  overflow-x: hidden;
+  background: #050505;
+}
+
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(circle at 20% 20%, #ff003c 0%, transparent 25%),
+    radial-gradient(circle at 80% 30%, #7000ff 0%, transparent 30%),
+    radial-gradient(circle at 50% 80%, #00eaff 0%, transparent 25%),
+    linear-gradient(120deg, #050505, #111, #000);
+  animation: bgMove 12s infinite alternate ease-in-out;
+}
+
+.bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 45px 45px;
+  animation: gridMove 8s linear infinite;
+}
+
+@keyframes bgMove {
+  from { filter: hue-rotate(0deg); transform: scale(1); }
+  to { filter: hue-rotate(60deg); transform: scale(1.08); }
+}
+
+@keyframes gridMove {
+  from { background-position: 0 0; }
+  to { background-position: 90px 90px; }
+}
+
+header {
+  padding: 30px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.logo span {
+  color: #ff004c;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 25px;
+  opacity: .85;
+}
+
+nav a:hover {
+  color: #ff004c;
+}
+
+.hero {
+  min-height: 85vh;
+  padding: 80px 8%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+.hero-text {
+  max-width: 650px;
+}
+
+.hero-text h1 {
+  font-size: 64px;
+  line-height: 1;
+  margin-bottom: 25px;
+}
+
+.hero-text h1 span {
+  color: #ff004c;
+}
+
+.hero-text p {
+  font-size: 20px;
+  line-height: 1.6;
+  color: #ddd;
+  margin-bottom: 35px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #ff004c, #7a00ff);
+  color: white;
+  border-radius: 40px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 30px rgba(255,0,76,.5);
+  transition: .3s;
+}
+
+.btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 45px rgba(255,0,76,.8);
+}
+
+.card-video {
+  width: 420px;
+  height: 540px;
+  border-radius: 30px;
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,.2);
+  box-shadow: 0 0 60px rgba(255,0,76,.25);
+  padding: 25px;
+  position: relative;
+  overflow: hidden;
+  transition: .2s;
+}
+
+.card-video::before {
+  content: "";
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  background: #ff004c;
+  filter: blur(90px);
+  right: -80px;
+  top: -80px;
+}
+
+.preview {
+  height: 300px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #111, #222);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 70px;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline {
+  margin-top: 25px;
+  position: relative;
+  z-index: 1;
+}
+
+.line {
+  height: 16px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+  background: linear-gradient(90deg, #ff004c, #7a00ff, #00eaff);
+  animation: pulse 2s infinite alternate;
+}
+
+.line:nth-child(2) {
+  width: 75%;
+}
+
+.line:nth-child(3) {
+  width: 55%;
+}
+
+@keyframes pulse {
+  from { opacity: .45; transform: scaleX(.9); }
+  to { opacity: 1; transform: scaleX(1); }
+}
+
+section {
+  padding: 80px 8%;
+}
+
+.title {
+  text-align: center;
+  font-size: 42px;
+  margin-bottom: 50px;
+}
+
+.services {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 25px;
+}
+
+.service {
+  padding: 35px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 24px;
+  backdrop-filter: blur(15px);
+  transition: .3s;
+}
+
+.service:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 0 35px rgba(255,0,76,.3);
+}
+
+.service h3 {
+  color: #ff004c;
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+.service p {
+  color: #ccc;
+  line-height: 1.5;
+}
+
+.portfolio {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+.work {
+  height: 260px;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #ff004c, #111, #7a00ff);
+  display: flex;
+  align-items: end;
+  padding: 25px;
+  font-size: 24px;
+  font-weight: bold;
+  position: relative;
+  overflow: hidden;
+}
+
+.work::after {
+  content: "▶";
+  position: absolute;
+  font-size: 90px;
+  opacity: .18;
+  right: 25px;
+  top: 60px;
+}
+
+.cta {
+  text-align: center;
+  background: rgba(255,255,255,.08);
+  margin: 60px 8%;
+  border-radius: 30px;
+  padding: 60px 20px;
+  border: 1px solid rgba(255,255,255,.15);
+}
+
+.cta h2 {
+  font-size: 42px;
+  margin-bottom: 20px;
+}
+
+.cta p {
+  color: #ddd;
+  margin-bottom: 30px;
+  font-size: 18px;
+}
+
+.phone {
+  margin-top: 20px;
+  font-size: 22px;
+  color: #fff;
+  font-weight: bold;
+}
+
+footer {
+  text-align: center;
+  padding: 35px;
+  color: #aaa;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-text h1 {
+    font-size: 44px;
+  }
+
+  .card-video {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  nav {
+    display: none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<header>
+  <div class="logo">Video<span>Pro</span></div>
+
+  <nav>
+    <a href="#servicos">Serviços</a>
+    <a href="#portfolio">Portfólio</a>
+    <a href="#contato">Contato</a>
+  </nav>
+</header>
+
+<main class="hero">
+  <div class="hero-text">
+    <h1>Vídeos que <span>vendem</span>, impactam e prendem atenção.</h1>
+
+    <p>
+      Edição profissional, cortes dinâmicos, reels, anúncios, vídeos institucionais,
+      motion design, legendas animadas e criação completa para marcas que querem aparecer.
+    </p>
+
+    <a class="btn" href="https://wa.me/5519982868927" target="_blank">
+      📱 Chamar no WhatsApp
+    </a>
+  </div>
+
+  <div class="card-video">
+    <div class="preview">▶</div>
+
+    <div class="timeline">
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
+  </div>
+</main>
+
+<section id="servicos">
+  <h2 class="title">Serviços</h2>
+
+  <div class="services">
+    <div class="service">
+      <h3>Video Maker</h3>
+      <p>Criação de vídeos para redes sociais, campanhas, empresas, produtos e eventos.</p>
+    </div>
+
+    <div class="service">
+      <h3>Edição Profissional</h3>
+      <p>Cortes modernos, ritmo dinâmico, correção de cor, áudio tratado e acabamento premium.</p>
+    </div>
+
+    <div class="service">
+      <h3>Reels & Shorts</h3>
+      <p>Vídeos verticais com legendas, efeitos, transições e chamadas impactantes.</p>
+    </div>
+
+    <div class="service">
+      <h3>Motion Design</h3>
+      <p>Animações, textos em movimento, vinhetas, identidade visual e elementos gráficos.</p>
+    </div>
+  </div>
+</section>
+
+<section id="portfolio">
+  <h2 class="title">Portfólio</h2>
+
+  <div class="portfolio">
+    <div class="work">Reels Comerciais</div>
+    <div class="work">Anúncios Criativos</div>
+    <div class="work">Vídeos Institucionais</div>
+    <div class="work">Edição para YouTube</div>
+  </div>
+</section>
+
+<section class="cta" id="contato">
+  <h2>Vamos transformar sua ideia em vídeo?</h2>
+
+  <p>Chame agora e solicite um orçamento personalizado.</p>
+
+  <a class="btn" href="https://wa.me/5519982868927" target="_blank">
+    📱 WhatsApp: (19) 98286-8927
+  </a>
+
+  <div class="phone">
+    Atendimento direto pelo WhatsApp
+  </div>
+</section>
+
+<footer>
+  © 2026 VideoPro — Video Maker & Editor Profissional
+</footer>
+
+<script>
+document.addEventListener("mousemove", function(e) {
+  const card = document.querySelector(".card-video");
+
+  if (!card) return;
+
+  const x = (window.innerWidth / 2 - e.pageX) / 35;
+  const y = (window.innerHeight / 2 - e.pageY) / 35;
+
+  card.style.transform = `rotateY(${-x}deg) rotateX(${y}deg)`;
+});
+</script>
+
+</body>
+</html>
